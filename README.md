@@ -10,7 +10,7 @@ Password: 12345678
 #### Demo version:
 
 ```sh
-https://cleva-77647.web.app/products
+https://cleva-77647.web.app
 ```
 
 #### Install local
