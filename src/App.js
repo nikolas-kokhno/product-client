@@ -53,7 +53,7 @@ const App = () => {
           <Route exact path="/products/edit">
             <EditProductPage />
           </Route>
-          <Redirect to="/products" />
+          <Redirect to="/products/new" />
         </Switch>
       </>
     );

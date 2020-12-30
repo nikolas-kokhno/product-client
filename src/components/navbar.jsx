@@ -16,7 +16,7 @@ const Navbar = () => {
       <Menu
         theme="dark"
         mode="horizontal"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={["2"]}
         style={{ textAlign: "right" }}
       >
         <Menu.Item key="1">
