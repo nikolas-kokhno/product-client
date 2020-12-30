@@ -1,8 +1,10 @@
 import React from "react";
 
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { Form, Input, SubmitButton } from "formik-antd";
+import { login } from "../store/actions";
 
 const initialValues = {
   email: "",
@@ -20,9 +22,22 @@ const LoginSchema = Yup.object().shape({
 });
 
 const LoginForm = () => {
+  const authState = useSelector(({ auth }) => {
+    return auth;
+  });
+  const dispatch = useDispatch();
+
   return (
     <div className="login__form">
-      <Formik initialValues={initialValues} validationSchema={LoginSchema}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={LoginSchema}
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          dispatch(login(values));
+          resetForm({});
+          setSubmitting(false);
+        }}
+      >
         {({ isValid }) => (
           <Form>
             <Form.Item name="email" showValidateSuccess={true}>
@@ -32,7 +47,11 @@ const LoginForm = () => {
               <Input name="password" placeholder="Password" />
             </Form.Item>
             <div className="login__form-btn">
-              <SubmitButton type="primary" disabled={!isValid} loading={false}>
+              <SubmitButton
+                type="primary"
+                disabled={!isValid}
+                loading={authState.loading}
+              >
                 Log In
               </SubmitButton>
             </div>

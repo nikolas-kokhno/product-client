@@ -8,7 +8,6 @@ const LoginPage = () => {
       <div className="login__title">
         <h4>Login page</h4>
       </div>
-
       <LoginForm />
     </div>
   );

@@ -6,7 +6,7 @@
 .login {
   max-width: 320px;
   margin: auto;
-  height: 100vh;
+  height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,5 +24,103 @@
     &-btn {
       text-align: center;
     }
+  }
+}
+
+.products {
+  background: #ececec;
+  min-height: calc(100vh - 64px);
+
+  &__empty {
+    height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  &__create {
+    height: calc(100vh - 100px);
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-title {
+      h4 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+    }
+
+    &-form {
+      width: 420px;
+      margin-top: 20px;
+    }
+
+    &-btn {
+      text-align: center;
+      margin-top: -20px;
+    }
+  }
+
+  &__list {
+    &-container {
+      width: 1400px;
+      padding: 20px;
+      margin: auto;
+    }
+  }
+
+  &__item {
+    &-img {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__edit {
+    height: calc(100vh - 100px);
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-title {
+      h4 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+    }
+
+    &-form {
+      width: 420px;
+      margin-top: 20px;
+    }
+
+    &-btn {
+      text-align: center;
+      margin-top: -20px;
+    }
+  }
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 64px);
+
+  p {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 600;
   }
 }
