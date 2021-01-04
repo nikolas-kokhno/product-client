@@ -6,6 +6,8 @@ import { Formik } from "formik";
 import { Checkbox, Form, Input, SubmitButton, DatePicker } from "formik-antd";
 import { editProduct } from "../store/actions";
 
+const img = new Image();
+
 const ProductSchema = Yup.object().shape({
   title: Yup.string()
     .required("This field is required")
@@ -17,6 +19,37 @@ const ProductSchema = Yup.object().shape({
     .positive("A price can't start with a minus")
     .min(1, "The minimum price cannot be less than $ 1")
     .max(99999999.99, "The maximum price cannot be more than $ 99999999.99"),
+  changeImg: Yup.boolean(),
+  imageURL: Yup.mixed().when("changeImg", {
+    is: true,
+    then: Yup.mixed()
+      .test(
+        "fileType",
+        "Incorrect file type",
+        (file) =>
+          file && ["image/png", "image/jpg", "image/jpeg"].includes(file.type)
+      )
+      .test(
+        "fileSizeMin",
+        "The height and width of the picture must be greater than 200px",
+        (file) => {
+          let binaryData = [];
+          binaryData.push(file);
+          img.src = window.URL.createObjectURL(new Blob(binaryData));
+          return img.width > 200 && img.height > 200;
+        }
+      )
+      .test(
+        "fileSizeMax",
+        "The height and width of the picture should not exceed 4000px",
+        (file) => {
+          let binaryData = [];
+          binaryData.push(file);
+          img.src = window.URL.createObjectURL(new Blob(binaryData));
+          return img.width < 4000 && img.height < 4000;
+        }
+      ),
+  }),
   onDiscount: Yup.boolean(),
   discount: Yup.number().when("onDiscount", {
     is: true,
@@ -42,6 +75,7 @@ const EditProductForm = () => {
   const dispatch = useDispatch();
   let editData = Location.value.productData;
   const [discountShow, setDiscountShow] = React.useState(false);
+  const [imgEditShow, setEditImgShow] = React.useState(false);
 
   return (
     <div className="products__edit-form">
@@ -73,6 +107,29 @@ const EditProductForm = () => {
                 placeholder="Start typing to create a desc..."
               />
             </Form.Item>
+            <Form.Item name="changeImg">
+              <Checkbox
+                name="changeImg"
+                checked={imgEditShow}
+                onChange={() => setEditImgShow(!imgEditShow)}
+              >
+                Change img
+              </Checkbox>
+            </Form.Item>
+            <Form.Item
+              name="imageURL"
+              style={{ display: imgEditShow ? "flex" : "none" }}
+            >
+              <input
+                id="file"
+                name="imageURL"
+                type="file"
+                for="changeImg"
+                onChange={(event) => {
+                  setFieldValue("imageURL", event.target.files[0]);
+                }}
+              />
+            </Form.Item>
             <Form.Item name="onDiscount">
               <Checkbox
                 name="onDiscount"
@@ -98,7 +155,7 @@ const EditProductForm = () => {
             >
               <DatePicker
                 name="discountTo"
-                showTime={true}
+                disabledTime
                 placeholder="DatePicker"
                 style={{ width: "347px" }}
               />

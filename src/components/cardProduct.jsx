@@ -10,7 +10,8 @@ const ProductCard = ({ productData }) => {
   const dispatch = useDispatch();
 
   const calculatePrice = (price, percent) => {
-    return parseInt(price) - (parseInt(price) / 100) * parseInt(percent);
+    let res = parseInt(price) - (parseInt(price) / 100) * parseInt(percent);
+    return res.toFixed(2);
   };
 
   const calculateDiscountDate = (discountTo) => {
@@ -23,7 +24,7 @@ const ProductCard = ({ productData }) => {
   };
 
   return (
-    <Col span={6}>
+    <Col span={6} xs={24} xl={8} sm={12}>
       <Card
         className="products__item"
         title={productData.title}
@@ -76,7 +77,7 @@ const ProductCard = ({ productData }) => {
             ) : (
               <>
                 <strike style={{ marginRight: "5px" }}>
-                  {productData.price}$
+                  {parseFloat(productData.price).toFixed(2)}$
                 </strike>
                 <strong>
                   {calculatePrice(productData.price, productData.discount)}$

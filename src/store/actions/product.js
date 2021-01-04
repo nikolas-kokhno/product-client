@@ -57,12 +57,21 @@ export const createProduct = (data) => async (dispatch) => {
 export const editProduct = (productID, data) => async (dispatch) => {
   dispatch({ type: PRODUCT_START });
 
-  axios.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${localStorage.getItem("token")}`;
+  const productEditData = new FormData();
+  productEditData.append("imageURL", data.imageURL);
+  productEditData.append("title", data.title);
+  productEditData.append("desc", data.desc);
+  productEditData.append("price", data.price);
+  productEditData.append("discount", data.discount);
+  productEditData.append("discountTo", data.discountTo);
 
   await axios
-    .put(`${baseURL}/products/${productID}`, data)
+    .put(`${baseURL}/products/${productID}`, productEditData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-type": null,
+      },
+    })
     .then((res) => {
       dispatch({ type: PRODUCT_EDIT_SUCCESS, payload: res.data });
       InfoMessage("success", "Product edited successfully!");

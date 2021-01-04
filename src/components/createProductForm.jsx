@@ -15,6 +15,8 @@ const initialValues = {
   discountTo: 0,
 };
 
+const img = new Image();
+
 const ProductSchema = Yup.object().shape({
   title: Yup.string()
     .required("This field is required")
@@ -29,15 +31,30 @@ const ProductSchema = Yup.object().shape({
   imageURL: Yup.mixed()
     .required("Image is required")
     .test(
-      "fileSize",
-      "File size too large, max file size is 2 Mb",
-      (file) => file && file.size <= 2100000
-    )
-    .test(
       "fileType",
       "Incorrect file type",
       (file) =>
         file && ["image/png", "image/jpg", "image/jpeg"].includes(file.type)
+    )
+    .test(
+      "fileSizeMin",
+      "The height and width of the picture must be greater than 200px",
+      (file) => {
+        let binaryData = [];
+        binaryData.push(file);
+        img.src = window.URL.createObjectURL(new Blob(binaryData));
+        return img.width > 200 && img.height > 200;
+      }
+    )
+    .test(
+      "fileSizeMax",
+      "The height and width of the picture should not exceed 4000px",
+      (file) => {
+        let binaryData = [];
+        binaryData.push(file);
+        img.src = window.URL.createObjectURL(new Blob(binaryData));
+        return img.width < 4000 && img.height < 4000;
+      }
     ),
   onDiscount: Yup.boolean(),
   discount: Yup.number().when("onDiscount", {
@@ -89,7 +106,7 @@ const CreateProductForm = () => {
               />
             </Form.Item>
             <Form.Item name="price" showValidateSuccess={true} label="Price">
-              <Input name="price" placeholder="Price product" />
+              <Input name="price" placeholder="Price product" type="number" />
             </Form.Item>
             <Form.Item name="desc" showValidateSuccess={true} label="Desc">
               <Input
@@ -130,7 +147,7 @@ const CreateProductForm = () => {
               style={{ display: discountShow ? "flex" : "none" }}
               label="Discon to"
             >
-              <DatePicker
+              <DatePicker.WeekPicker
                 name="discountTo"
                 showTime={true}
                 placeholder="DatePicker"
